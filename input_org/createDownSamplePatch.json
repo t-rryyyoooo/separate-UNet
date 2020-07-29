@@ -1,0 +1,13 @@
+{
+    "image_directory" : "This directory has raw data under image_directory/case_00/ [ex] $HOME/Desktop/data/Abdomen",
+    "save_directory" : "createDownSamplePatch.py saved image or array in this directory, save_directory/case_00 [ex] $HOME/Desktop/data/patch/Abdomen/32-512-512-1/all/image", 
+    "image_name" : "imaging.nii.gz",
+    "label_patch_size" : "Shape combNet outputs. creatDownSamplePatch.py create patch for label_patch_size / 2**num_down. If label_patch_size is 512-512-32 and num_down is 2, createDownSamplepatch.py outputs 128-128-8. [ex]512-512-32",
+    "plane_size" : "512-512",
+    "overlap" : 1,
+    "num_down" :2,
+    "is_label" : "If Yes, input image is label, if No, input image is raw data [ex] Yes or No",
+    "num_array" : ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"],
+    "log_file" : "fail/createDownSamplePatch.txt"
+}
+

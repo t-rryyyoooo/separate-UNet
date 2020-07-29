@@ -1,0 +1,13 @@
+{
+    "data_directory" : "This directory has raw data under data_directory/case_00/ [ex] $HOME/Desktop/data/Abdomen",
+    "modelweight_path" : "The modelweight suitable for input_size patch. [ex] $HOME/Desktop/data/modelweight/Abdomen/28-44-44-1/mask/with_pad/fold1/latest.pkl",
+    "save_directory" : "The save directory. [ex] $HOME/Desktop/data/patch/Abdomen/32-512-512-1/all/image", 
+    "output_layer" :"How many layer you use [ex] (int)1",
+    "input_size" : "The patch size for trained model. [ex] 32-32-32",
+    "overlap" : 1,
+    "image_name" : "The raw data name. [ex] imaging.nii.gz",
+    "num_array" : ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"],
+    "gpu_ids" : "0",
+    "log_file" : "fail/createPatch.txt"
+}
+

@@ -1,0 +1,15 @@
+{
+    "true_directory" : "This directory has raw data. raw data path is true_directory/case_00/true_name. [ex] $HOME/Desktop/data/Abdomen", 
+    "predict_directory" : "This directory has predicted label. Predicted label path is predict_directory/case_00/predict_name. [ex] $HOME/Desktop/data/patch/Abdomen/no_pad/116-132-132/mask/segmentation", 
+    "save_path" : "Output DICE score to this path. [ex] $HOME/Desktop/data/result/Abdomen/no_pad/116-132-132/mask/DICE.csv",
+    "patientID_list" : "The patient ID list subjected to segment. [ex] 20 21 22 23 24 25 26 27 28 29",
+    "classes" : 14, 
+    "class_label" : "The columns for dataframe [ex] backGound spleen  rightKidney  leftKidney gallbladder esophagus liver stomach aorta inferiorVenaCava portalVeinAndSplenicVein pancreas rightAdrenalGland leftAdrenalGland",
+    "true_name" : "segmentation.nii.gz",
+    "predict_name" : "label.mha"
+}
+
+
+
+
+

@@ -1,0 +1,20 @@
+{
+	"dataset_path" : "Dataset is under this directory. [ex] /home/vmlab/Desktop/data/patch/Abdomen/28-44-44/mask", 
+	"model_savepath" : "You save modelweight to under this directory. [ex] /home/vmlab/Desktop/data/modelweight/Abdomen/28-44-44/mask",
+	"train_list" : "Training patient ID [ex] 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19",
+    "val_list" : "Validation patient ID [ex] 20 21 22 23 24 25 26 27 28 29",
+    "module_name" : "The directory name which has model and system and so on. [ex] UNet_with_pad",
+    "system_name" : "The system class name in system.py in module_name directory. [ex] UNetSystem",
+    "checkpoint_name" : "The checkpoint class name in modelCheckpoint.py in module_name directory. [ex] BestAndLatestModelCheckpoint",
+	"log" : "The log [ex] /home/vmlab/Desktop/data/log/abdomen/with_pad/28-44-44/mask",
+	"in_channel" : 1, 
+	"num_class" : 14,
+	"learning_rate" : 0.001,
+	"batch_size" : 6, 
+	"num_workers" : 6,
+	"epoch" : 50,
+	"gpu_ids" : "0 1", 
+	"api_key" : "Your comet.ml API KEY. If you don' use it, then, feed No",
+	"project_name" : "For comet.ml if you don't feed api_key, you don't have to. [ex] abdomen",
+	"experiment_name" : "Same as above. [ex] with_pad"
+}

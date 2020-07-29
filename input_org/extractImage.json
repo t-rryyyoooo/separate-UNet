@@ -1,0 +1,13 @@
+{
+    "data_directory" : "The parent path for raw data. The raw data path is data_directory/case_[num_array]/image_nama. [ex] $HOME/Desktop/data/Abdomen",
+    "save_directory" : "We save patch image under save_directory/case_[num_array]. You must add /image to the end of the path. [ex] $HOME/Desktop/data/patch/Abdomen/28-44-44-1/mask/image", 
+    "image_patch_size" : "28-44-44",
+    "label_patch_size" : "28-44-44",
+    "overlap" : 1,
+    "image_name" : "The raw data name. [ex] imaging.nii.gz",
+    "label_name" : "[The ground truth name. [ex] segmentation.nii.gz",
+    "mask_name" : "The mask file name. [ex] mask.mha",
+    "num_array" : ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"],
+    "log_file" : "fail/extractImage.txt"
+}
+
