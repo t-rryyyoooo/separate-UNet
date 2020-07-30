@@ -132,9 +132,28 @@ class UNetModel(nn.Module):
 
         return x
 
+    def forwardWithoutSegmentation(self, x):
+        conv_results = []
+        for contract in self.contracts:
+            x, conv_result = contract(x)
+            conv_results.append(conv_result)
+
+        conv_results = conv_results[::-1]
+
+        x, _ = self.lastContract(x)
+        if self.use_dropout:
+            x = self.dropout(x)
+            
+        for expand, conv_result in zip(self.expands, conv_results):
+            x = expand(x, conv_result)
+
+
+        return x
+
+
 if __name__ == "__main__":
-    model=UNetModel(1 ,3)
-    net_shape = (1, 44, 44, 28)
+    model=UNetModel(1 ,14)
+    net_shape = (1, 1, 128, 128, 8)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     model.to(device)
@@ -142,5 +161,5 @@ if __name__ == "__main__":
     dummy_img = torch.rand(net_shape).to(device)
     print("input: ", net_shape)
 
-    output = model(dummy_img)
+    output = model.forwardWithoutSegmentation(dummy_img)
     print('output:', output.size())

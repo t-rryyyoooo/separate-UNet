@@ -29,13 +29,14 @@ class PatchCreater():
         # Load model.
         with open(self.modelweight_path, "rb") as f:
             model = cloudpickle.load(f)
-#model = torch.nn.DataParallel(model, device_ids=self.gpu_ids)
 
         model.eval()
 
-        # Pad an image considering stride etc. 
+        # Read image.
         self.image = sitk.ReadImage(self.image_path)
+        print("Image shape : {}".format(self.image.GetSize()))
 
+        # Pad or crop the image in sagittal and coronal direction to plane_size. 
         required_shape = np.array(self.image.GetSize())
         required_shape[0:2] = self.plane_size
 
@@ -52,49 +53,37 @@ class PatchCreater():
 
             self.image = padding(self.image, lower_pad_size, upper_pad_size)
 
-        slide = self.input_size // np.array((1, 1, self.overlap))
-        lower_pad_size, upper_pad_size = caluculatePaddingSize(np.array(self.image.GetSize()), self.input_size, self.input_size, slide)
+        print("Image shape : {}".format(self.image.GetSize()))
 
-        padded_image = padding(self.image, lower_pad_size[0].tolist(), upper_pad_size[0].tolist(), mirroring=True)
+        # Pad the image in axial direction to just make patches.
+        image_shape = np.array(self.image.GetSize())
+        slide = self.input_size // np.array((1, 1, self.overlap))
+        lower_pad_size, upper_pad_size = caluculatePaddingSize(image_shape, self.input_size, self.input_size, slide)
+
+        padded_image = padding(self.image, lower_pad_size[0].tolist(), upper_pad_size[0].tolist())
 
         padded_image_array = sitk.GetArrayFromImage(padded_image)
+        print("Padded image shape : {}".format(padded_image.GetSize()))
 
-        z_size, y_size, x_size = padded_image_array.shape
-        
-        self.patch_array_list = []
-        length = (z_size // slide[2]) * (y_size // slide[1]) * (x_size // slide[0])
-        with tqdm(total=length, desc="Clipping and concatenating images...", ncols=60) as pbar:
-            for z in range(0, z_size, slide[2]):
-                patch_array = [] # For one patch
-                for y in range(0, y_size, slide[1]):
-                    batch_array = [] # To output feature maps for clipped images at once.
-                    for x in range(0, x_size, slide[0]):
-                        z_slice = slice(z, z + self.input_size[2])
-                        y_slice = slice(y, y + self.input_size[1])
-                        x_slice = slice(x, x + self.input_size[0])
+        padded_image_shape = np.array(padded_image.GetSize()) - self.input_size
+        self.feature_map_list= []
+        length = (padded_image_shape[2] // slide[2]) + 1
+        with tqdm(total=length, desc="Making feature maps...", ncols=60) as pbar:
+            for z in range(0, padded_image_shape[2] + 1, slide[2]):
+                z_slice = slice(z, z + self.input_size[2])
+                batch = padded_image[:, :, z_slice]
+                batch_array = sitk.GetArrayFromImage(batch)
+                batch_array = torch.from_numpy(batch_array).to(device, dtype=torch.float)
+                batch_array = batch_array[None, None, ...]
 
-                        # Make mini patch.
-                        mini_patch_array = padded_image_array[z_slice, y_slice, x_slice]
-                        batch_array.append(mini_patch_array)
-                        pbar.update(1)
+                for c in range(self.output_layer):
+                    batch_array, feature_map = model.contracts[c](batch_array)
 
-                    batch_array = np.stack(batch_array)
-                    batch_array = torch.from_numpy(batch_array).to(device, dtype=torch.float)
-                    batch_array = batch_array[:, None, ...]
+                feature_map = feature_map.to("cpu").detach().numpy()
+                feature_map = np.squeeze(feature_map)
 
-                    for c in range(self.output_layer):
-                        batch_array, feature_maps = model.contracts[c](batch_array)
-
-                    feature_maps = feature_maps.to("cpu").detach().numpy()
-                    # Concat images in sagittal direction. make retangular-solid.
-                    feature_maps = np.concatenate([feature_maps[x, ...] for x in range(x_size // slide[0])], axis=-1)
-
-                    patch_array.append(feature_maps)
-
-                # Concat images in coronal direction. Make original size in sagittal and coronal direction, square.
-                patch_array = np.concatenate(patch_array, axis=-2)
-
-                self.patch_array_list.append(patch_array)
+                self.feature_map_list.append(feature_map)
+                pbar.update(1)
 
     def output(self):
         return self.patch_array_list
@@ -103,10 +92,10 @@ class PatchCreater():
         save_path = Path(save_path)
         save_path.mkdir(parents=True, exist_ok=True)
 
-        with tqdm(total=len(self.patch_array_list), desc="Saving images...", ncols=60) as pbar:
-            for i, patch in enumerate(self.patch_array_list):
+        with tqdm(total=len(self.feature_map_list), desc="Saving images...", ncols=60) as pbar:
+            for i, feature_map in enumerate(self.feature_map_list):
                 path = save_path / ("image_" + str(i).zfill(3) + ".npy")
-                np.save(str(path), patch)
+                np.save(str(path), feature_map)
 
                 pbar.update(1)
 

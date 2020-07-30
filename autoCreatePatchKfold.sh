@@ -21,7 +21,7 @@ fi
 # From json file, read required variables.
 readonly JSON_FILE="${INPUT_DIRECTORY}/${JSON_NAME}"
 readonly DATA_DIRECTORY=$(eval echo $(cat ${JSON_FILE} | jq -r ".data_directory"))
-readonly MODELWEIGHT_DIRECTORY=$(eval echo $(cat ${JSON_FILE} | jq -r ".MODELWEIGHT_DIRECTORY"))
+readonly MODELWEIGHT_DIRECTORY=$(eval echo $(cat ${JSON_FILE} | jq -r ".modelweight_directory"))
 readonly SAVE_DIRECTORY=$(eval echo $(cat ${JSON_FILE} | jq -r ".save_directory"))
 readonly KFOLD_LIST=$(cat ${JSON_FILE} | jq -r ".kfold_list[]")
 readonly NUM_ARRAY=$(cat ${JSON_FILE} | jq -r ".num_array[]")
@@ -40,12 +40,12 @@ date >> $LOG_FILE
 
 for kfold in ${KFOLD_LIST[@]}
 do
-    SAVE_PATH="${SAVE_DIRECTORY}/${kfold}"
+    SAVE_PATH="${SAVE_DIRECTORY}/layer_${OUTPUT_LAYER}/${kfold}"
     modelweight_path="${MODELWEIGHT_DIRECTORY}/${kfold}/${MODEL_NAME}"
     for number in ${NUM_ARRAY[@]}
     do
      image_path="${DATA_DIRECTORY}/case_${number}/${IMAGE_NAME}"
-     save_path="${SAVE_PATH}/layer_${OUTPUT_LAYER}/case_${number}"
+     save_path="${SAVE_PATH}/case_${number}"
 
      echo "image_path:${image_path}"
      echo "MODELWEIGHT_PATH:${modelweight_path}"

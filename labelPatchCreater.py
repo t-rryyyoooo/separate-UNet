@@ -45,6 +45,7 @@ class LabelPatchCreater():
             self.image = padding(self.image, lower_pad_size, upper_pad_size)
 
 
+        print(self.image.GetSize())
         """pad in axial direction. """
         slide = self.patch_size // np.array((1, 1, self.overlap))
         lower_pad_size, upper_pad_size = caluculatePaddingSize(np.array(self.image.GetSize()), self.patch_size, self.patch_size, slide)
@@ -53,12 +54,12 @@ class LabelPatchCreater():
 
         
         """ Make patch. """
-        _, _, z_length = self.image.GetSize()
+        _, _, z_length = self.image.GetSize() - self.patch_size
         total = z_length // slide[2]
         self.patch_list = []
         self.patch_array_list = []
         with tqdm(total=total, desc="Clipping images...", ncols=60) as pbar:
-            for z in range(0, z_length, slide[2]):
+            for z in range(0, z_length + 1, slide[2]):
                 z_slice = slice(z, z + self.patch_size[2])
                 patch = self.image[:,:, z_slice]
                 patch.SetOrigin(self.image.GetOrigin())

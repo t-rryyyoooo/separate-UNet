@@ -47,6 +47,12 @@ def cropping(image, lower_crop_size, upper_crop_size):
 
 def padding(image, lower_pad_size, upper_pad_size, mirroring = False):
     pad_filter = sitk.MirrorPadImageFilter() if mirroring else sitk.ConstantPadImageFilter()
+    if not mirroring:
+        minmax = sitk.MinimumMaximumImageFilter()
+        minmax.Execute(image)
+        minval = minmax.GetMinimum()
+        pad_filter.SetConstant(minval)
+
     pad_filter.SetPadLowerBound(lower_pad_size)
     pad_filter.SetPadUpperBound(upper_pad_size)
     padded_image = pad_filter.Execute(image)
