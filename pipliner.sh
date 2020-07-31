@@ -159,7 +159,7 @@ done
  fi
 
  echo "---------- Logging ----------"
-python3 logger.py ${JSON_FILE}
+#python3 logger.py ${JSON_FILE}
  echo Done.
 
 
