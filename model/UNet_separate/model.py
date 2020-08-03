@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from .model_part import CreateUpConvBlock
+from model_part import CreateUpConvBlock
 
 class SepNet(nn.Module):
     def __init__(self, in_channel_1=64, in_channel_2=128, in_channel_thin=128, num_class=14):
@@ -26,16 +26,21 @@ if __name__ == "__main__":
     model = SepNet(
             in_channel_1=64, 
             in_channel_2=128,
-            in_channel_thin=128,
+            in_channel_thin=64,
             num_class=14
             )
-    input_1_shape = [1, 64, 512, 512, 8*4]
-    input_2_shape = [1, 128, 256, 256, 8*2]
-    input_thin_shape = [1, 128, 128, 128, 8]
+    input_1_shape = (64, 512, 512, 8*4)
+    input_2_shape = (128, 256, 256, 8*2)
+    input_thin_shape = (64, 128, 128, 8)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = "cpu"
+
 
     model.to(device)
+
+    from torchsummary import summary
+    summary(model, [input_1_shape, input_2_shape, input_thin_shape])
 
     input_1_dummy = torch.rand(input_1_shape).to(device)
     input_2_dummy = torch.rand(input_2_shape).to(device)
@@ -43,7 +48,7 @@ if __name__ == "__main__":
 
     print("Device:", device)
     print("Input:", input_1_dummy.shape, input_2_dummy.shape, input_thin_dummy.shape)
-    output = model(input_1_dummy, input_2_dummy, input_thin_dummy)
+#output = model(input_1_dummy, input_2_dummy, input_thin_dummy)
 
     print("Output :", output.size())
 

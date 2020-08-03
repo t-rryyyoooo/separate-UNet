@@ -89,6 +89,7 @@ class ThinPatchCreater():
                 patch_array = torch.from_numpy(patch_array).to(device, dtype=torch.float)[None, None,...]
                 feature_map = model.forwardWithoutSegmentation(patch_array)
                 feature_map = feature_map.to("cpu").detach().numpy()
+                feature_map = np.squeeze(feature_map)
                 self.feature_map_list.append(feature_map)
 
                 pbar.update(1)
