@@ -28,7 +28,6 @@ class LoadNumpys(object):
     def __call__(self, image_file_list, label_file):
         image_array_list = []
         for image_file in image_file_list:
-            print(image_file)
             image_array = np.load(image_file)
             if image_array.ndim != 4:
                 image_array = image_array[np.newaxis, ...]

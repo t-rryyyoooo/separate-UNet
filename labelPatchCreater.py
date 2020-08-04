@@ -18,11 +18,12 @@ class LabelPatchCreater():
     In this class we use simpleITK method to create patch, so, pay attention to shape.
 
     """
-    def __init__(self, label, patch_size, plane_size, overlap):
+    def __init__(self, label, patch_size, plane_size, overlap, num_rep=1):
         self.image = label 
         self.patch_size = np.array(patch_size)
         self.plane_size = np.array(plane_size)
         self.overlap = overlap
+        self.num_rep = num_rep
 
     def execute(self):
         """ Raw data is clipped or padded for required_shape. """
@@ -66,8 +67,9 @@ class LabelPatchCreater():
                 
                 patch_array = sitk.GetArrayFromImage(patch)
 
-                self.patch_list.append(patch)
-                self.patch_array_list.append(patch_array)
+                for _ in range(self.num_rep):
+                    self.patch_list.append(patch)
+                    self.patch_array_list.append(patch_array)
                 
                 pbar.update(1)
 

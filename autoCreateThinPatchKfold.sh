@@ -30,6 +30,7 @@ readonly MODEL_NAME=$(cat ${JSON_FILE} | jq -r ".model_name")
 readonly LABEL_PATCH_SIZE=$(cat ${JSON_FILE} | jq -r ".label_patch_size")
 readonly PLANE_SIZE=$(cat ${JSON_FILE} | jq -r ".plane_size")
 readonly OVERLAP=$(cat ${JSON_FILE} | jq -r ".overlap")
+readonly NUM_CHANNEL=$(cat ${JSON_FILE} | jq -r ".num_channel")
 readonly IS_LABEL=$(cat ${JSON_FILE} | jq -r ".is_label")
 readonly NUM_DOWN=$(cat ${JSON_FILE} | jq -r ".num_down")
 readonly NUM_ARRAY=$(cat ${JSON_FILE} | jq -r ".num_array[]")
@@ -48,14 +49,15 @@ do
         echo "SAVE_PATH:${save_path}"
         echo "LABEL_PATCH_SIZE:${LABEL_PATCH_SIZE}"
         echo "OVERLAP:${OVERLAP}"
+        echo "NUM_REP:${NUM_REP}"
         echo "NUM_DOWN:${NUM_DOWN}"
 
         if [ $IS_LABEL = "No" ];then
         echo "IS_LABEL:No"
-        python3 createThinPatch.py ${image_path} ${modelweight_path} ${save_path} --label_patch_size ${LABEL_PATCH_SIZE} --plane_size ${PLANE_SIZE} --overlap ${OVERLAP} --num_down ${NUM_DOWN} 
+        python3 createThinPatch.py ${image_path} ${modelweight_path} ${save_path} --label_patch_size ${LABEL_PATCH_SIZE} --plane_size ${PLANE_SIZE} --overlap ${OVERLAP} --num_down ${NUM_DOWN} --num_channel ${NUM_CHANNEL}
         else
         echo "IS_LABEL:Yes"
-        python3 createThinPatch.py ${image_path} ${modelweight_path} ${save_path} --label_patch_size ${LABEL_PATCH_SIZE} --plane_size ${PLANE_SIZE} --overlap ${OVERLAP} --num_down ${NUM_DOWN} --is_label
+        python3 createThinPatch.py ${image_path} ${modelweight_path} ${save_path} --label_patch_size ${LABEL_PATCH_SIZE} --plane_size ${PLANE_SIZE} --overlap ${OVERLAP} --num_down ${NUM_DOWN} --is_label --num_channel ${NUM_CHANNEL}
         fi
 
 # Judge if it works.

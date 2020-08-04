@@ -13,6 +13,7 @@ def parseArgs():
     parser.add_argument("--label_patch_size", help="512-512-32, crop image to the label_patch_size // 2**num_down", default="512-512-32")
     parser.add_argument("--plane_size", help="512-512", default="512-512")
     parser.add_argument("--overlap", type=int, default=1)
+    parser.add_argument("--num_channel", type=int, default=-1)
     parser.add_argument("--num_down", help="1:half, 2:quater", default=2, type=int)
     parser.add_argument("--is_label", action="store_true")
 
@@ -45,7 +46,8 @@ def main(args):
             plane_size = plane_size,
             overlap = args.overlap,
             num_down = args.num_down,
-            is_label = args.is_label
+            is_label = args.is_label,
+            num_channel = args.num_channel
             )
 
     tpc.execute()

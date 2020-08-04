@@ -7,7 +7,7 @@ from tqdm import tqdm
 from pathlib import Path
 
 class ThinPatchCreater():
-    def __init__(self, image, model_path, label_patch_size, plane_size, overlap, num_down, is_label=False):
+    def __init__(self, image, model_path, label_patch_size, plane_size, overlap, num_down, num_channel=-1, is_label=False):
         self.image = image
         self.model_path = model_path
         self.label_patch_size = np.array(label_patch_size)
@@ -15,6 +15,7 @@ class ThinPatchCreater():
         self.overlap = overlap
         self.num_down = num_down
         self.is_label = is_label
+        self.num_channel = num_channel
 
     def execute(self):
         # Crop or pad the image for required_shape.
@@ -90,7 +91,16 @@ class ThinPatchCreater():
                 feature_map = model.forwardWithoutSegmentation(patch_array)
                 feature_map = feature_map.to("cpu").detach().numpy()
                 feature_map = np.squeeze(feature_map)
-                self.feature_map_list.append(feature_map)
+
+                max_channel = feature_map.shape[0]
+                if self.num_channel == -1:
+                    self.num_channel = feature_map.shape[0]
+
+                for i in range(0, max_channel, self.num_channel):
+                    c_slice = slice(i, i + self.num_channel)
+                    f_map = feature_map[c_slice, ...]
+
+                    self.feature_map_list.append(f_map)
 
                 pbar.update(1)
 

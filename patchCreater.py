@@ -7,7 +7,7 @@ from functions import caluculatePaddingSize, cropping, rounding, padding, getIma
 from tqdm import tqdm
 
 class PatchCreater():
-    def __init__(self, image_path, modelweight_path, output_layer=1, input_size=(32, 32, 32), plane_size=(512, 512), overlap=1, gpu_ids=[0]):
+    def __init__(self, image_path, modelweight_path, output_layer=1, num_channel=None, input_size=(32, 32, 32), plane_size=(512, 512), overlap=1, gpu_ids=[0]):
         """
         simpleitk shape : sagittal, coronal, axial
         numpy shape : axial coronal, sagittal
@@ -20,6 +20,7 @@ class PatchCreater():
         self.plane_size = np.array(plane_size)
         self.overlap = overlap
         self.gpu_ids = gpu_ids
+        self.num_channel = num_channel
 
 
     def execute(self):
@@ -82,7 +83,16 @@ class PatchCreater():
                 feature_map = feature_map.to("cpu").detach().numpy()
                 feature_map = np.squeeze(feature_map)
 
-                self.feature_map_list.append(feature_map)
+                max_channel = feature_map.shape[0]
+                if self.num_channel == -1:
+                    self.num_channel = feature_map.shape[0]
+
+                for i in range(0, max_channel, self.num_channel):
+                    c_slice = slice(i, i + self.num_channel)
+                    f_map = feature_map[c_slice, ...]
+
+                    self.feature_map_list.append(f_map)
+
                 pbar.update(1)
 
     def output(self):

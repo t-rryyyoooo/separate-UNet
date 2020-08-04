@@ -14,6 +14,7 @@ def parseArgs():
     parser.add_argument("--patch_size", default="512-512-32")
     parser.add_argument("--plane_size", default="512-512")
     parser.add_argument("--overlap", type=int, default=1)
+    parser.add_argument("--num_rep", type=int, default=1)
     parser.add_argument("--save_image", action="store_true")
     parser.add_argument("--save_array", action="store_true")
 
@@ -39,7 +40,8 @@ def main(args):
             label = image, 
             patch_size = patch_size, 
             plane_size = plane_size, 
-            overlap = args.overlap
+            overlap = args.overlap,
+            num_rep = args.num_rep
             )
 
     lpc.execute()

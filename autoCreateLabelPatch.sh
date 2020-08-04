@@ -28,6 +28,7 @@ readonly SAVE_NAME=$(cat ${JSON_FILE} | jq -r ".save_name")
 readonly PATCH_SIZE=$(cat ${JSON_FILE} | jq -r ".patch_size")
 readonly PLANE_SIZE=$(cat ${JSON_FILE} | jq -r ".plane_size")
 readonly OVERLAP=$(cat ${JSON_FILE} | jq -r ".overlap")
+readonly NUM_REP=$(cat ${JSON_FILE} | jq -r ".num_rep")
 readonly NUM_ARRAY=$(cat ${JSON_FILE} | jq -r ".num_array[]")
 
 
@@ -40,8 +41,9 @@ do
     echo "PATCH_SIZE:${PATCH_SIZE}"
     echo "PLANE_SIZE:${PLANE_SIZE}"
     echo "OVERLAP:${OVERLAP}"
+    echo "NUM_REP:${NUM_REP}"
 
-python3 createLabelPatch.py ${label_path} ${save_path} --patch_size ${PATCH_SIZE} --plane_size ${PLANE_SIZE} --overlap ${OVERLAP} --save_array
+python3 createLabelPatch.py ${label_path} ${save_path} --patch_size ${PATCH_SIZE} --plane_size ${PLANE_SIZE} --overlap ${OVERLAP} --save_array --num_rep ${NUM_REP}
 
 # Judge if it works.
     if [ $? -eq 0 ]; then

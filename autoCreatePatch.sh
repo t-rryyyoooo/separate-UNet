@@ -27,6 +27,7 @@ readonly NUM_ARRAY=$(cat ${JSON_FILE} | jq -r ".num_array[]")
 readonly OUTPUT_LAYER=$(cat ${JSON_FILE} | jq -r ".output_layer")
 readonly INPUT_SIZE=$(cat ${JSON_FILE} | jq -r ".input_size")
 readonly IMAGE_NAME=$(cat ${JSON_FILE} | jq -r ".image_name")
+readonly NUM_CHANNEL=$(cat ${JSON_FILE} | jq -r ".num_channel")
 readonly OVERLAP=$(cat ${JSON_FILE} | jq -r ".overlap")
 readonly GPU_IDS=$(cat ${JSON_FILE} | jq -r ".gpu_ids")
 readonly LOG_FILE=$(eval echo $(cat ${JSON_FILE} | jq -r ".log_file"))
@@ -46,10 +47,11 @@ do
  echo "save_path:${save_path}"
  echo "OUTPUT_LAYER:${OUTPUT_LAYER}"
  echo "INPUT_SIZE:${INPUT_SIZE}"
+ echo "NUM_CHANNEL:${NUM_CHANNEL}"
  echo "OVERLAP:${OVERLAP}"
  echo "GPU_IDS:${GPU_IDS}"
 
-python3 createPatch.py ${image_path} ${MODELWEIGHT_PATH} ${save_path} --output_layer ${OUTPUT_LAYER} --input_size ${INPUT_SIZE} --overlap ${OVERLAP} --gpu_ids ${GPU_IDS}
+python3 createPatch.py ${image_path} ${MODELWEIGHT_PATH} ${save_path} --output_layer ${OUTPUT_LAYER} --input_size ${INPUT_SIZE} --overlap ${OVERLAP} --gpu_ids ${GPU_IDS} --num_channel ${NUM_CHANNEL}
 
  # Judge if it works.
  if [ $? -eq 0 ]; then

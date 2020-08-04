@@ -12,6 +12,7 @@ def parseArgs():
     parser.add_argument("--input_size", help="32-32-32", default="32-32-32")
     parser.add_argument("--plane_size", help="512-512", default="512-512")
     parser.add_argument("--overlap", default=1, type=int, help="Overlap in axial direction. Default 1")
+    parser.add_argument("--num_channel", default=-1, type=int, help="The number of channel which the outputed image has.")
     parser.add_argument("--gpu_ids", help="0 1", nargs="*", default=0, type=int)
 
     args = parser.parse_args()
@@ -40,7 +41,8 @@ def main(args):
             input_size = input_size,
             plane_size = plane_size,
             overlap = args.overlap,
-            gpu_ids = args.gpu_ids
+            gpu_ids = args.gpu_ids,
+            num_channel = args.num_channel
             )
 
     pc.execute()

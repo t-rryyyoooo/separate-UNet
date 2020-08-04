@@ -92,7 +92,7 @@ class UNetSystem(pl.LightningModule):
                 "val_dice" : dice
                 }
         
-        return {"loss" : loss, "log" : tensorboard_logs, "progress_bar" : progress_bar}
+        return {"val_loss" : loss, "log" : tensorboard_logs, "progress_bar" : progress_bar}
 
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x["val_loss"] for x in outputs]).mean()
