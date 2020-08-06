@@ -153,13 +153,16 @@ class UNetModel(nn.Module):
 
 if __name__ == "__main__":
     model=UNetModel(1 ,14)
-    net_shape = (1, 1, 128, 128, 8)
+    net_shape = (1, 128, 128, 8)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     model.to(device)
 
+    from torchsummary import summary
+    a = summary(model, net_shape)
+
     dummy_img = torch.rand(net_shape).to(device)
     print("input: ", net_shape)
 
-    output = model.forwardWithoutSegmentation(dummy_img)
-    print('output:', output.size())
+    #output = model.forwardWithoutSegmentation(dummy_img)
+    #print('output:', output.size())
