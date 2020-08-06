@@ -33,7 +33,7 @@ if __name__ == "__main__":
             in_channel_1=64, 
             in_channel_2=128,
             in_channel_thin=1, 
-            out_channel_thin=128,
+            out_channel_thin=64,
             num_class=14
             )
     input_1_shape = [1, 64, 512, 512, 8*4]

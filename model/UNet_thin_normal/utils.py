@@ -34,7 +34,7 @@ def separateData(image_path_list, label_path, criteria, phase):
         label_list = lab_path.glob("label*")
         label_list = sorted(label_list)
 
-        length = len(image_lists[0])
+        length = len(label_list)
         for image_list in image_lists:
             assert length == len(image_list)
 
